@@ -384,10 +384,10 @@
     <form id="orcamentoForm">
       
       <label>Nome *</label>
-      <input type="text" id="nome" placeholder="Ex: Maria" required>
+      <input type="text" id="nome" placeholder="Ex: Maria Silva" required>
 
       <label>Celular *</label>
-      <input type="text" id="celular" placeholder="Ex: (11) 91234-5678">
+      <input type="text" id="celular" placeholder="(00) 00000-0000" maxlength="15" required>
       
       <label>Origem *</label>
       <input type="text" id="origem" placeholder="Ex: São Paulo" required>
@@ -447,6 +447,29 @@
   </div>
 
   <script>
+  // Máscara para celular brasileiro
+  function maskPhone(value) {
+    value = value.replace(/\D/g, ''); // Remove tudo que não é número
+    
+    if (value.length <= 10) {
+      // Telefone fixo: (00) 0000-0000
+      value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+      value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+    } else {
+      // Celular: (00) 00000-0000
+      value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+      value = value.replace(/(\d)(\d{4})$/, '$1-$2');
+    }
+    
+    return value;
+  }
+
+  // Aplicar máscara ao digitar
+  document.getElementById('celular').addEventListener('input', function(e) {
+    e.target.value = maskPhone(e.target.value);
+  });
+
+  // Função para converter data de YYYY-MM-DD para DD/MM/YYYY
   function formatDateToBrazilian(dateString) {
     if (!dateString) return '';
     const [year, month, day] = dateString.split('-');
